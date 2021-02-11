@@ -1,0 +1,12 @@
+syntax = "proto3";
+package tendermint.cns.cns;
+
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/tendermint/cns/x/cns/types";
+
+// GenesisState defines the capability module's genesis state.
+message GenesisState {
+    // this line is used by starport scaffolding # genesis/proto/state
+}
+
