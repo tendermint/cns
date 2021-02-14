@@ -7,9 +7,9 @@ import "cns/cns.proto";
 option go_package = "github.com/tendermint/cns/x/cns/types";
 
 service Msg {
-  rpc RegisterChainName(MsgRegisterNameRequest) returns (MsgRegisterNameResponse);
+  rpc RegisterChainName(MsgRegisterChainNameRequest) returns (MsgRegisterChainNameResponse);
 
-  rpc ExecAuthorized(MsgUpdateChainInfoRequest) returns (MsgUpdateChainInfoResponse);
+  rpc UpdateChainInfo(MsgUpdateChainInfoRequest) returns (MsgUpdateChainInfoResponse);
 }
 
 message MsgRegisterChainNameRequest{
