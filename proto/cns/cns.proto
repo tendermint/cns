@@ -1,0 +1,15 @@
+syntax = "proto3";
+package tendermint.cns.cns;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/tendermint/cns/x/cns/types";
+
+
+message ChainInfo{
+  option (gogoproto.equal)            = true;
+  option (gogoproto.goproto_stringer) = false;
+
+  string chain_name = 1;
+  
+}
