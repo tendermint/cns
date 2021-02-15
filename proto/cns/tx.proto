@@ -2,7 +2,7 @@ syntax = "proto3";
 package tendermint.cns.cns;
 
 import "gogoproto/gogo.proto";
-import "proto/cns/cns.proto";
+import "cns/cns.proto";
 
 option go_package = "github.com/tendermint/cns/x/cns/types";
 
