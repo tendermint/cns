@@ -1,9 +1,5 @@
 package types
 
-import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
-)
-
 const (
 	// ModuleName defines the module name
 	ModuleName = "cns"
@@ -21,15 +17,11 @@ const (
 	MemStoreKey = "mem_capability"
 )
 
-func KeyPrefix(p string) []byte {
-	return []byte(p)
-}
-
 var (
 	// Keys for store prefixes
 	CnsKey = []byte{0x01} // prefix for each key
 )
 
-func GetStorKey(name string, addr sdk.AccAddress) []byte {
-	return append(CnsKey, append(addr.Bytes(), []byte(name)...)...)
+func GetStorKey(name, addr string) []byte {
+	return append(CnsKey, append([]byte(name), []byte(addr)...)...)
 }

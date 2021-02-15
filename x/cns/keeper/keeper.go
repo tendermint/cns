@@ -48,7 +48,7 @@ func (k Keeper) Register(ctx sdk.Context, cInfo types.ChainInfo) error {
 func (k Keeper) Update(ctx sdk.Context, cInfo types.ChainInfo) error {
 	store := ctx.KVStore(k.storeKey)
 
-	_, err := k.GetChainInfo(store, cInfo.ChainName)
+	storeInfo, err := k.GetChainInfo(store, cInfo.ChainName, cInfo.Owner)
 	if err != nil {
 		return err
 	}
@@ -58,8 +58,8 @@ func (k Keeper) Update(ctx sdk.Context, cInfo types.ChainInfo) error {
 		return err
 	}
 
-	//TODO(sahith): don't overwrite - compare and retain old values
-	err = k.SetChainInfo(store, cInfo)
+	storeInfo.Update(cInfo)
+	err = k.SetChainInfo(store, storeInfo)
 	if err != nil {
 		return err
 	}
@@ -67,9 +67,8 @@ func (k Keeper) Update(ctx sdk.Context, cInfo types.ChainInfo) error {
 	return nil
 }
 
-func (k Keeper) GetChainInfo(store sdk.KVStore, cName string) (types.ChainInfo, error) {
-	//TODO(sahith): update to use store key
-	bytes := store.Get(types.KeyPrefix(cName))
+func (k Keeper) GetChainInfo(store sdk.KVStore, cName, owner string) (types.ChainInfo, error) {
+	bytes := store.Get(types.GetStorKey(cName, owner))
 
 	var cInfo types.ChainInfo
 	err := k.cdc.UnmarshalBinaryBare(bytes, &cInfo)
@@ -86,7 +85,6 @@ func (k Keeper) SetChainInfo(store sdk.KVStore, info types.ChainInfo) error {
 		return err
 	}
 
-	ownerAddr, _ := sdk.AccAddressFromBech32(info.Owner)
-	store.Set(types.GetStorKey(info.ChainName, ownerAddr), bytes)
+	store.Set(types.GetStorKey(info.ChainName, info.Owner), bytes)
 	return nil
 }
