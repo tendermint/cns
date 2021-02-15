@@ -12,6 +12,8 @@ for dir in $proto_dirs; do
   -I="$COSMOS_SDK_DIR/proto" \
   --gocosmos_out=plugins=interfacetype+grpc,\
 Mgoogle/protobuf/any.proto=github.com/cosmos/cosmos-sdk/codec/types:. \
+  --doc_out=./docs \
+  --doc_opt=markdown,proto.md \
   $(find "${dir}" -maxdepth 1 -name '*.proto')
 
   # command to generate gRPC gateway (*.pb.gw.go in respective modules) files

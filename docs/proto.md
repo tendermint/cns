@@ -3,14 +3,14 @@
 
 ## Table of Contents
 
-- [proto/cns/cns.proto](#proto/cns/cns.proto)
+- [cns/cns.proto](#cns/cns.proto)
     - [ChainInfo](#tendermint.cns.cns.ChainInfo)
     - [VersionInfo](#tendermint.cns.cns.VersionInfo)
   
-- [proto/cns/query.proto](#proto/cns/query.proto)
+- [cns/query.proto](#cns/query.proto)
     - [Query](#tendermint.cns.cns.Query)
   
-- [proto/cns/tx.proto](#proto/cns/tx.proto)
+- [cns/tx.proto](#cns/tx.proto)
     - [MsgRegisterChainNameRequest](#tendermint.cns.cns.MsgRegisterChainNameRequest)
     - [MsgRegisterChainNameResponse](#tendermint.cns.cns.MsgRegisterChainNameResponse)
     - [MsgUpdateChainInfoRequest](#tendermint.cns.cns.MsgUpdateChainInfoRequest)
@@ -18,17 +18,17 @@
   
     - [Msg](#tendermint.cns.cns.Msg)
   
-- [proto/cns/genesis.proto](#proto/cns/genesis.proto)
+- [cns/genesis.proto](#cns/genesis.proto)
     - [GenesisState](#tendermint.cns.cns.GenesisState)
   
 - [Scalar Value Types](#scalar-value-types)
 
 
 
-<a name="proto/cns/cns.proto"></a>
+<a name="cns/cns.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## proto/cns/cns.proto
+## cns/cns.proto
 
 
 
@@ -80,10 +80,10 @@ TODO(sahith): Add json and yaml flags
 
 
 
-<a name="proto/cns/query.proto"></a>
+<a name="cns/query.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## proto/cns/query.proto
+## cns/query.proto
 
 
  
@@ -107,10 +107,10 @@ this line is used by starport scaffolding # 2
 
 
 
-<a name="proto/cns/tx.proto"></a>
+<a name="cns/tx.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## proto/cns/tx.proto
+## cns/tx.proto
 
 
 
@@ -194,10 +194,10 @@ this line is used by starport scaffolding # 2
 
 
 
-<a name="proto/cns/genesis.proto"></a>
+<a name="cns/genesis.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## proto/cns/genesis.proto
+## cns/genesis.proto
 
 
 
