@@ -12,14 +12,13 @@ message ChainInfo{
 
   string chain_name = 1;
   int64  expiration = 2;
-  repeated string metadata = 3;
-  string owner      = 4;
+  string owner      = 3;
 
-  string canonical_ibc_client = 5;
+  string canonical_ibc_client = 4;
 
-  repeated string seed       = 6;
-  string source_code_url     = 7;
-  VersionInfo version = 8;
+  repeated string seed       = 5;
+  string source_code_url     = 6;
+  VersionInfo version = 7;
 }
 
 message VersionInfo{

@@ -48,7 +48,7 @@ func (k Keeper) Register(ctx sdk.Context, cInfo types.ChainInfo) error {
 func (k Keeper) Update(ctx sdk.Context, cInfo types.ChainInfo) error {
 	store := ctx.KVStore(k.storeKey)
 
-	storeInfo, err := k.GetChainInfo(store, cInfo.ChainName, cInfo.Owner)
+	storeInfo, err := k.GetChainInfo(ctx, cInfo.ChainName, cInfo.Owner)
 	if err != nil {
 		return err
 	}
@@ -67,11 +67,15 @@ func (k Keeper) Update(ctx sdk.Context, cInfo types.ChainInfo) error {
 	return nil
 }
 
-func (k Keeper) GetChainInfo(store sdk.KVStore, cName, owner string) (types.ChainInfo, error) {
-	bytes := store.Get(types.GetStorKey(cName, owner))
+func (k Keeper) GetChainInfo(ctx sdk.Context, cName, owner string) (types.ChainInfo, error) {
+	store := ctx.KVStore(k.storeKey)
 
+	bz := store.Get(types.GetStorKey(cName, owner))
+	if bz == nil {
+		return types.ChainInfo{}, fmt.Errorf("chain info not found for name %s", cName)
+	}
 	var cInfo types.ChainInfo
-	err := k.cdc.UnmarshalBinaryBare(bytes, &cInfo)
+	err := k.cdc.UnmarshalBinaryBare(bz, &cInfo)
 	if err != nil {
 		return types.ChainInfo{}, err
 	}

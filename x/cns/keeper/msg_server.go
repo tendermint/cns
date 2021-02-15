@@ -30,7 +30,6 @@ func (k msgServer) RegisterChainName(goCtx context.Context, msg *types.MsgRegist
 	cInfo := types.ChainInfo{
 		ChainName:          msg.ChainName,
 		Expiration:         0,
-		Metadata:           nil,
 		Owner:              msg.Owner,
 		CanonicalIbcClient: msg.CanonicalIbcClient,
 		Seed:               msg.Seed,
@@ -54,11 +53,9 @@ func (k msgServer) UpdateChainInfo(goCtx context.Context, msg *types.MsgUpdateCh
 		return nil, err
 	}
 
-	//TODO(sahith): replace owner with address
 	cInfo := types.ChainInfo{
 		ChainName:          msg.ChainName,
 		Expiration:         0,
-		Metadata:           nil,
 		Owner:              msg.Owner,
 		CanonicalIbcClient: msg.CanonicalIbcClient,
 		Seed:               msg.Seed,

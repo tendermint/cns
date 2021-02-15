@@ -42,7 +42,6 @@ TODO(sahith): Add json and yaml flags
 | ----- | ---- | ----- | ----------- |
 | chain_name | [string](#string) |  |  |
 | expiration | [int64](#int64) |  |  |
-| metadata | [string](#string) | repeated |  |
 | owner | [string](#string) |  |  |
 | canonical_ibc_client | [string](#string) |  |  |
 | seed | [string](#string) | repeated |  |

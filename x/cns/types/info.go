@@ -1,7 +1,7 @@
 package types
 
 func (c ChainInfo) ValidateBasic() error {
-	panic("implement me")
+	return nil
 }
 
 func (c ChainInfo) Update(newInfo ChainInfo) {
