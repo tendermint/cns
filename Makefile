@@ -7,10 +7,10 @@ PACKAGES=$(shell go list ./...)
 all: install
 
 install: go.sum
-	go install -mod=readonly ./cmd/cosmos-cashd
+	go install -mod=readonly ./cmd/cnsd
 
 install-debug: go.sum
-	go build -mod=readonly -gcflags="all=-N -l" ./cmd/cosmos-cashd
+	go build -mod=readonly -gcflags="all=-N -l" ./cmd/cnsd
 
 go.sum: go.mod
 	@echo "--> Ensure dependencies have not been modified"
