@@ -1,28 +1,21 @@
 #!/usr/bin/env bash
 
-# see pre-requests:
-# - https://grpc.io/docs/languages/go/quickstart/
-# - gocosmos plugin is automatically installed during scaffolding.
-
 set -eo pipefail
 
-proto_dirs=$(find ./proto -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
-for dir in $proto_dirs; do
-  protoc \
-  -I "proto" \
-  -I "third_party/proto" \
+PROJECT_PROTO_DIR=proto/cns
+COSMOS_SDK_DIR=${COSMOS_SDK_DIR:-$(go list -f "{{ .Dir }}" -m github.com/cosmos/cosmos-sdk)}
+
+# Generate Go types from protobuf
+protoc \
+  -I=. \
+  -I="$COSMOS_SDK_DIR/third_party/proto" \
+  -I="$COSMOS_SDK_DIR/proto" \
   --gocosmos_out=plugins=interfacetype+grpc,\
 Mgoogle/protobuf/any.proto=github.com/cosmos/cosmos-sdk/codec/types:. \
-  $(find "${dir}" -maxdepth 1 -name '*.proto')
-
-  # command to generate gRPC gateway (*.pb.gw.go in respective modules) files
-  protoc \
-    -I "proto" \
-    -I "third_party/proto" \
-    --grpc-gateway_out=logtostderr=true:. \
-    $(find "${dir}" -maxdepth 1 -name '*.proto')
-done
-
+  --grpc-gateway_out=logtostderr=true:. \
+  --doc_out=./docs \
+  --doc_opt=markdown,proto.md \
+  $(find "${PROJECT_PROTO_DIR}" -maxdepth 1 -name '*.proto')
 
 # move proto files to the right places
 cp -r github.com/tendermint/cns/* ./
