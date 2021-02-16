@@ -1,0 +1,35 @@
+syntax = "proto3";
+package tendermint.cns.cns;
+
+import "gogoproto/gogo.proto";
+import "cns/cns.proto";
+
+option go_package = "github.com/tendermint/cns/x/cns/types";
+
+service Msg {
+  rpc RegisterChainName(MsgRegisterChainNameRequest) returns (MsgRegisterChainNameResponse);
+
+  rpc UpdateChainInfo(MsgUpdateChainInfoRequest) returns (MsgUpdateChainInfoResponse);
+}
+
+message MsgRegisterChainNameRequest{
+  string chain_name = 1;
+  string owner      = 2;
+  repeated string seed = 3;
+  string source_code_url = 4;
+  string canonical_ibc_client = 5;
+  VersionInfo version = 6;
+}
+
+message MsgRegisterChainNameResponse{ }
+
+message MsgUpdateChainInfoRequest{
+  string chain_name = 1;
+  string owner      = 2;
+  repeated string seed = 3;
+  string source_code_url = 4;
+  string canonical_ibc_client = 5;
+  VersionInfo version = 6;
+}
+
+message MsgUpdateChainInfoResponse{ }
