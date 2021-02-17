@@ -59,18 +59,14 @@ func (k Keeper) Update(ctx sdk.Context, cInfo types.ChainInfo) error {
 	}
 
 	storeInfo.Update(cInfo)
-	err = k.SetChainInfo(store, storeInfo)
-	if err != nil {
-		return err
-	}
 
-	return nil
+	return k.SetChainInfo(store, storeInfo)
 }
 
 func (k Keeper) GetChainInfo(ctx sdk.Context, cName, owner string) (types.ChainInfo, error) {
 	store := ctx.KVStore(k.storeKey)
 
-	bz := store.Get(types.GetStorKey(cName, owner))
+	bz := store.Get(types.GetStoreKey(cName, owner))
 	if bz == nil {
 		return types.ChainInfo{}, fmt.Errorf("chain info not found for name %s", cName)
 	}
@@ -89,6 +85,6 @@ func (k Keeper) SetChainInfo(store sdk.KVStore, info types.ChainInfo) error {
 		return err
 	}
 
-	store.Set(types.GetStorKey(info.ChainName, info.Owner), bytes)
+	store.Set(types.GetStoreKey(info.ChainName, info.Owner), bytes)
 	return nil
 }

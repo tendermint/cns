@@ -22,6 +22,6 @@ var (
 	CnsKey = []byte{0x01} // prefix for each key
 )
 
-func GetStorKey(name, addr string) []byte {
+func GetStoreKey(name, addr string) []byte {
 	return append(CnsKey, append([]byte(name), []byte(addr)...)...)
 }
