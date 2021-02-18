@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"fmt"
-
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -15,6 +14,9 @@ type (
 		cdc      codec.Marshaler
 		storeKey sdk.StoreKey
 		memKey   sdk.StoreKey
+
+		bankKeeper  types.BankKeeper
+		distrKeeper types.DistributionKeeper
 	}
 )
 
@@ -87,4 +89,30 @@ func (k Keeper) SetChainInfo(store sdk.KVStore, info types.ChainInfo) error {
 
 	store.Set(types.GetStoreKey(info.ChainName, info.Owner), bytes)
 	return nil
+}
+
+func (k Keeper) GetChainInfoFromName(ctx sdk.Context, name string) types.ChainInfo {
+	var info types.ChainInfo
+	k.IterateAllInfos(ctx, name, func(info types.ChainInfo) bool {
+		return false
+	})
+
+	return info
+
+}
+
+func (k Keeper) IterateAllInfos(ctx sdk.Context, owner string, cb func(info types.ChainInfo) bool) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := store.Iterator(nil, nil)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var info types.ChainInfo
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &info)
+
+		if cb(info) {
+			break
+		}
+	}
 }

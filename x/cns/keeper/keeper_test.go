@@ -100,6 +100,7 @@ func (s *TestSuite) TestKeeper() {
 				info, err := s.keeper.GetChainInfo(s.ctx, tc.cInfo.ChainName, tc.cInfo.Owner)
 				s.Require().NoError(err)
 				s.Require().Equal(testInfo, info)
+				s.T().Log(s.keeper.GetChainInfoFromName(s.ctx, tc.cInfo.ChainName))
 			} else {
 				info, err := s.keeper.GetChainInfo(s.ctx, tc.cInfo.ChainName, tc.cInfo.Owner)
 				s.Require().Error(err)
