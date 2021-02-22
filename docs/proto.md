@@ -133,7 +133,7 @@ Query defines the gRPC querier service.
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| ChainInfo | [QueryChainInfoRequest](#tendermint.cns.cns.QueryChainInfoRequest) | [QueryChainInfoResponse](#tendermint.cns.cns.QueryChainInfoResponse) |  |
+| QueryChainInfo | [QueryChainInfoRequest](#tendermint.cns.cns.QueryChainInfoRequest) | [QueryChainInfoResponse](#tendermint.cns.cns.QueryChainInfoResponse) |  |
 
  
 
@@ -238,7 +238,11 @@ Query defines the gRPC querier service.
 ### GenesisState
 GenesisState defines the capability module&#39;s genesis state.
 
-this line is used by starport scaffolding # genesis/proto/state
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| fee | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated |  |
+| info | [ChainInfo](#tendermint.cns.cns.ChainInfo) | repeated |  |
 
 
 

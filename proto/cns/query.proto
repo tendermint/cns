@@ -10,7 +10,7 @@ option go_package = "github.com/tendermint/cns/x/cns/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  rpc ChainInfo(QueryChainInfoRequest) returns (QueryChainInfoResponse) {
+  rpc QueryChainInfo(QueryChainInfoRequest) returns (QueryChainInfoResponse) {
     option (google.api.http).get = "/cns/cns/info/{chain_name}";
   }
 }

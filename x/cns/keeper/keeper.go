@@ -33,13 +33,11 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 }
 
 func (k Keeper) Register(ctx sdk.Context, cInfo types.ChainInfo) error {
-	store := ctx.KVStore(k.storeKey)
-
 	if err := cInfo.ValidateBasic(); err != nil {
 		return err
 	}
 
-	err := k.SetChainInfo(store, cInfo)
+	err := k.SetChainInfo(ctx, cInfo)
 	if err != nil {
 		return err
 	}
@@ -48,8 +46,6 @@ func (k Keeper) Register(ctx sdk.Context, cInfo types.ChainInfo) error {
 }
 
 func (k Keeper) Update(ctx sdk.Context, cInfo types.ChainInfo) error {
-	store := ctx.KVStore(k.storeKey)
-
 	storeInfo, err := k.GetChainInfo(ctx, cInfo.ChainName, cInfo.Owner)
 	if err != nil {
 		return err
@@ -62,7 +58,7 @@ func (k Keeper) Update(ctx sdk.Context, cInfo types.ChainInfo) error {
 
 	storeInfo.Update(cInfo)
 
-	return k.SetChainInfo(store, storeInfo)
+	return k.SetChainInfo(ctx, storeInfo)
 }
 
 func (k Keeper) GetChainInfo(ctx sdk.Context, cName, owner string) (types.ChainInfo, error) {
@@ -81,7 +77,9 @@ func (k Keeper) GetChainInfo(ctx sdk.Context, cName, owner string) (types.ChainI
 	return cInfo, err
 }
 
-func (k Keeper) SetChainInfo(store sdk.KVStore, info types.ChainInfo) error {
+func (k Keeper) SetChainInfo(ctx sdk.Context, info types.ChainInfo) error {
+	store := ctx.KVStore(k.storeKey)
+
 	bytes, err := k.cdc.MarshalBinaryBare(&info)
 	if err != nil {
 		return err
@@ -92,16 +90,20 @@ func (k Keeper) SetChainInfo(store sdk.KVStore, info types.ChainInfo) error {
 }
 
 func (k Keeper) GetChainInfoFromName(ctx sdk.Context, name string) types.ChainInfo {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := sdk.KVStorePrefixIterator(store, []byte(name))
+	defer iterator.Close()
+
 	var info types.ChainInfo
-	k.IterateAllInfos(ctx, name, func(info types.ChainInfo) bool {
-		return false
-	})
+	for ; iterator.Valid(); iterator.Next() {
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &info)
+	}
 
 	return info
-
 }
 
-func (k Keeper) IterateAllInfos(ctx sdk.Context, owner string, cb func(info types.ChainInfo) bool) {
+func (k Keeper) IterateAllInfos(ctx sdk.Context, cb func(info types.ChainInfo) bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := store.Iterator(nil, nil)

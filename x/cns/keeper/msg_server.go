@@ -26,7 +26,6 @@ func (k msgServer) RegisterChainName(goCtx context.Context, msg *types.MsgRegist
 		return nil, err
 	}
 
-	//TODO(sahith): replace owner with address
 	cInfo := types.ChainInfo{
 		ChainName:          msg.ChainName,
 		Expiration:         0,
@@ -35,7 +34,7 @@ func (k msgServer) RegisterChainName(goCtx context.Context, msg *types.MsgRegist
 		Seed:               msg.Seed,
 		SourceCodeUrl:      msg.SourceCodeUrl,
 		Version:            msg.Version,
-		Fee:                sdk.NewCoins(types.DefaultFee),
+		Fee:                sdk.NewCoins(types.DefaultFee(types.DefaultDenom)),
 	}
 
 	ownerAddr, err := sdk.AccAddressFromBech32(msg.Owner)
@@ -43,7 +42,7 @@ func (k msgServer) RegisterChainName(goCtx context.Context, msg *types.MsgRegist
 		return nil, err
 	}
 
-	err = k.distrKeeper.FundCommunityPool(ctx, sdk.NewCoins(types.DefaultFee), ownerAddr)
+	err = k.distrKeeper.FundCommunityPool(ctx, sdk.NewCoins(types.DefaultFee(types.DefaultDenom)), ownerAddr)
 	if err != nil {
 		return nil, err
 	}
