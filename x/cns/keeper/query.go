@@ -26,3 +26,5 @@ func NewQuerier(k Keeper, legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
 		return res, err
 	}
 }
+
+//TODO Add query handlers

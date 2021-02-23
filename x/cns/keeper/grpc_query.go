@@ -24,3 +24,5 @@ func (k Keeper) QueryChainInfo(c context.Context, req *types.QueryChainInfoReque
 
 	return &types.QueryChainInfoResponse{Info: info}, nil
 }
+
+//TODO(sahith) Add query for all chain infos
