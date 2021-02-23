@@ -1,0 +1,21 @@
+name: Lint
+# Lint runs golangci-lint over the entire cosmos-rosetta-gateway repository
+# This workflow is run on every pull request and push to master or develop
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - develop
+jobs:
+  golangci:
+    name: golangci-lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2
+      - uses: golangci/golangci-lint-action@master
+        with:
+          version: v1.37
+          args: --timeout 10m
+          github-token: ${{ secrets.github_token }}
