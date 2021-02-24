@@ -13,7 +13,10 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	infos := genState.Info
 
 	for _, info := range infos {
-		k.SetChainInfo(ctx, info)
+		err := k.SetChainInfo(ctx, info)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 

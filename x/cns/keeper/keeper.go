@@ -15,7 +15,6 @@ type (
 		storeKey sdk.StoreKey
 		memKey   sdk.StoreKey
 
-		bankKeeper  types.BankKeeper
 		distrKeeper types.DistributionKeeper
 	}
 )
