@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/tendermint/cns/x/cns/types"
 )
 
@@ -19,7 +18,7 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 var _ types.MsgServer = msgServer{}
 
-func (k msgServer) RegisterChainName(goCtx context.Context, msg *types.MsgRegisterChainNameRequest) (*types.MsgRegisterChainNameResponse, error) {
+func (k msgServer) RegisterChainName(goCtx context.Context, msg *types.MsgRegisterChainName) (*types.MsgRegisterChainNameResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	_, err := sdk.AccAddressFromBech32(msg.Owner)
@@ -38,16 +37,6 @@ func (k msgServer) RegisterChainName(goCtx context.Context, msg *types.MsgRegist
 		Fee:                sdk.NewCoins(types.DefaultFee(types.DefaultDenom)),
 	}
 
-	ownerAddr, err := sdk.AccAddressFromBech32(msg.Owner)
-	if err != nil {
-		return nil, errors.Wrap(err, "unable to register chain name")
-	}
-
-	err = k.distrKeeper.FundCommunityPool(ctx, sdk.NewCoins(types.DefaultFee(types.DefaultDenom)), ownerAddr)
-	if err != nil {
-		return nil, err
-	}
-
 	err = k.Register(ctx, cInfo)
 	if err != nil {
 		return nil, err
@@ -56,7 +45,7 @@ func (k msgServer) RegisterChainName(goCtx context.Context, msg *types.MsgRegist
 	return &types.MsgRegisterChainNameResponse{}, err
 }
 
-func (k msgServer) UpdateChainInfo(goCtx context.Context, msg *types.MsgUpdateChainInfoRequest) (*types.MsgUpdateChainInfoResponse, error) {
+func (k msgServer) UpdateChainInfo(goCtx context.Context, msg *types.MsgUpdateChainInfo) (*types.MsgUpdateChainInfoResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	_, err := sdk.AccAddressFromBech32(msg.Owner)
