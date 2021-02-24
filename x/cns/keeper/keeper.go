@@ -32,11 +32,22 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 }
 
 func (k Keeper) Register(ctx sdk.Context, cInfo types.ChainInfo) error {
-	if err := cInfo.ValidateBasic(); err != nil {
+	err := cInfo.ValidateBasic()
+	if err != nil {
 		return err
 	}
 
-	err := k.SetChainInfo(ctx, cInfo)
+	ownerAddr, err := sdk.AccAddressFromBech32(cInfo.Owner)
+	if err != nil {
+		return err
+	}
+
+	err = k.distrKeeper.FundCommunityPool(ctx, sdk.NewCoins(types.DefaultFee(types.DefaultDenom)), ownerAddr)
+	if err != nil {
+		return err
+	}
+
+	err = k.SetChainInfo(ctx, cInfo)
 	if err != nil {
 		return err
 	}
