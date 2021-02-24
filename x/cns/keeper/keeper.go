@@ -79,6 +79,7 @@ func (k Keeper) GetChainInfo(ctx sdk.Context, cName, owner string) (types.ChainI
 	if bz == nil {
 		return types.ChainInfo{}, fmt.Errorf("chain info not found for name %s", cName)
 	}
+
 	var cInfo types.ChainInfo
 	err := k.cdc.UnmarshalBinaryBare(bz, &cInfo)
 	if err != nil {

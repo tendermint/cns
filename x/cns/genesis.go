@@ -10,9 +10,7 @@ import (
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	//TODO: Use params to set fee and accepted denoms
-	infos := genState.Info
-
-	for _, info := range infos {
+	for _, info := range genState.Infos {
 		err := k.SetChainInfo(ctx, info)
 		if err != nil {
 			panic(err)
@@ -29,7 +27,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	})
 
 	return &types.GenesisState{
-		Fee:  sdk.NewCoins(types.DefaultFee(types.DefaultDenom)),
-		Info: infos,
+		Fee:   sdk.NewCoins(types.DefaultFee(types.DefaultDenom)),
+		Infos: infos,
 	}
 }

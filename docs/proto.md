@@ -242,7 +242,7 @@ GenesisState defines the capability module&#39;s genesis state.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | fee | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated |  |
-| info | [ChainInfo](#tendermint.cns.cns.ChainInfo) | repeated |  |
+| infos | [ChainInfo](#tendermint.cns.cns.ChainInfo) | repeated |  |
 
 
 

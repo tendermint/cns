@@ -12,6 +12,6 @@ message GenesisState {
 
   repeated cosmos.base.v1beta1.Coin fee  = 1 [(gogoproto.nullable) = false];
 
-  repeated ChainInfo info = 2[(gogoproto.nullable) = false];
+  repeated ChainInfo infos = 2[(gogoproto.nullable) = false];
 }
 
