@@ -20,4 +20,4 @@ jobs:
         with:
           file: ./coverage.txt
           fail_ci_if_error: true
-          github-token: ${{ secrets.github_token }}
+          github-token: ${{ secrets.codecov }}
