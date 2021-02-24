@@ -19,11 +19,12 @@ type (
 	}
 )
 
-func NewKeeper(cdc codec.Marshaler, storeKey, memKey sdk.StoreKey) *Keeper {
+func NewKeeper(cdc codec.Marshaler, storeKey, memKey sdk.StoreKey, distrKeeper types.DistributionKeeper) *Keeper {
 	return &Keeper{
-		cdc:      cdc,
-		storeKey: storeKey,
-		memKey:   memKey,
+		cdc:         cdc,
+		storeKey:    storeKey,
+		memKey:      memKey,
+		distrKeeper: distrKeeper,
 	}
 }
 
@@ -102,7 +103,7 @@ func (k Keeper) SetChainInfo(ctx sdk.Context, info types.ChainInfo) error {
 func (k Keeper) GetChainInfoFromName(ctx sdk.Context, name string) types.ChainInfo {
 	store := ctx.KVStore(k.storeKey)
 
-	iterator := sdk.KVStorePrefixIterator(store, []byte(name))
+	iterator := sdk.KVStorePrefixIterator(store, append(types.CnsKey, []byte(name)...))
 	defer iterator.Close()
 
 	var info types.ChainInfo
