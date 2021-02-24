@@ -1,6 +1,6 @@
 # Chain Name Service (CNS)
 
-The CNS module is a new Cosmos SDK module that allows Cosmos addresses to purchase, sell, and administer chain names.
+The CNS module is a new Cosmos SDK module that allows Cosmos addresses to obtain and administer chain names.
 
 ## Why Cosmos Hub needs a CNS
 
