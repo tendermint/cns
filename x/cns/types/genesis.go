@@ -10,8 +10,8 @@ const DefaultIndex uint64 = 1
 // DefaultGenesis returns the default Capability genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-		Fee:  sdk.NewCoins(DefaultFee(DefaultDenom)),
-		Info: []ChainInfo{},
+		Fee:   sdk.NewCoins(DefaultFee(DefaultDenom)),
+		Infos: []ChainInfo{},
 	}
 }
 
