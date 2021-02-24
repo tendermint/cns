@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/tendermint/cns/x/cns/types"
 )
 
@@ -36,16 +35,6 @@ func (k msgServer) RegisterChainName(goCtx context.Context, msg *types.MsgRegist
 		SourceCodeUrl:      msg.SourceCodeUrl,
 		Version:            msg.Version,
 		Fee:                sdk.NewCoins(types.DefaultFee(types.DefaultDenom)),
-	}
-
-	ownerAddr, err := sdk.AccAddressFromBech32(msg.Owner)
-	if err != nil {
-		return nil, errors.Wrap(err, "unable to register chain name")
-	}
-
-	err = k.distrKeeper.FundCommunityPool(ctx, sdk.NewCoins(types.DefaultFee(types.DefaultDenom)), ownerAddr)
-	if err != nil {
-		return nil, err
 	}
 
 	err = k.Register(ctx, cInfo)
