@@ -9,14 +9,25 @@ import (
 // InitGenesis initializes the capability module's state from a provided genesis
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
-	// this line is used by starport scaffolding # genesis/module/init
+	//TODO: Use params to set fee and accepted denoms
+	for _, info := range genState.Infos {
+		err := k.SetChainInfo(ctx, info)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 // ExportGenesis returns the capability module's exported genesis.
 func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
-	genesis := types.DefaultGenesis()
+	var infos []types.ChainInfo
+	k.IterateAllInfos(ctx, func(info types.ChainInfo) bool {
+		infos = append(infos, info)
+		return false
+	})
 
-	// this line is used by starport scaffolding # genesis/module/export
-
-	return genesis
+	return &types.GenesisState{
+		Fee:   sdk.NewCoins(types.DefaultFee(types.DefaultDenom)),
+		Infos: infos,
+	}
 }

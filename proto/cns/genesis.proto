@@ -1,12 +1,17 @@
 syntax = "proto3";
 package tendermint.cns.cns;
 
-// this line is used by starport scaffolding # genesis/proto/import
+import "cosmos/base/v1beta1/coin.proto";
+import "cns/cns.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/tendermint/cns/x/cns/types";
 
 // GenesisState defines the capability module's genesis state.
 message GenesisState {
-    // this line is used by starport scaffolding # genesis/proto/state
+
+  repeated cosmos.base.v1beta1.Coin fee  = 1 [(gogoproto.nullable) = false];
+
+  repeated ChainInfo infos = 2[(gogoproto.nullable) = false];
 }
 

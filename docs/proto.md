@@ -8,6 +8,9 @@
     - [VersionInfo](#tendermint.cns.cns.VersionInfo)
   
 - [cns/query.proto](#cns/query.proto)
+    - [QueryChainInfoRequest](#tendermint.cns.cns.QueryChainInfoRequest)
+    - [QueryChainInfoResponse](#tendermint.cns.cns.QueryChainInfoResponse)
+  
     - [Query](#tendermint.cns.cns.Query)
   
 - [cns/tx.proto](#cns/tx.proto)
@@ -42,12 +45,12 @@ TODO(sahith): Add json and yaml flags
 | ----- | ---- | ----- | ----------- |
 | chain_name | [string](#string) |  |  |
 | expiration | [int64](#int64) |  |  |
-| metadata | [string](#string) | repeated |  |
 | owner | [string](#string) |  |  |
 | canonical_ibc_client | [string](#string) |  |  |
 | seed | [string](#string) | repeated |  |
 | source_code_url | [string](#string) |  |  |
 | version | [VersionInfo](#tendermint.cns.cns.VersionInfo) |  |  |
+| fee | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated |  |
 
 
 
@@ -86,6 +89,36 @@ TODO(sahith): Add json and yaml flags
 ## cns/query.proto
 
 
+
+<a name="tendermint.cns.cns.QueryChainInfoRequest"></a>
+
+### QueryChainInfoRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| chain_name | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="tendermint.cns.cns.QueryChainInfoResponse"></a>
+
+### QueryChainInfoResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| info | [ChainInfo](#tendermint.cns.cns.ChainInfo) |  |  |
+
+
+
+
+
  
 
  
@@ -98,10 +131,9 @@ TODO(sahith): Add json and yaml flags
 ### Query
 Query defines the gRPC querier service.
 
-this line is used by starport scaffolding # 2
-
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
+| QueryChainInfo | [QueryChainInfoRequest](#tendermint.cns.cns.QueryChainInfoRequest) | [QueryChainInfoResponse](#tendermint.cns.cns.QueryChainInfoResponse) |  |
 
  
 
@@ -206,7 +238,11 @@ this line is used by starport scaffolding # 2
 ### GenesisState
 GenesisState defines the capability module&#39;s genesis state.
 
-this line is used by starport scaffolding # genesis/proto/state
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| fee | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated |  |
+| infos | [ChainInfo](#tendermint.cns.cns.ChainInfo) | repeated |  |
 
 
 

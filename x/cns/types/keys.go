@@ -17,6 +17,12 @@ const (
 	MemStoreKey = "mem_capability"
 )
 
-func KeyPrefix(p string) []byte {
-	return []byte(p)
+var (
+	// Keys for store prefixes
+	CnsKey = []byte{0x01} // prefix for each key
+)
+
+//TODO(sahith) Is using owner and addr for key an overkill??
+func GetStoreKey(name, addr string) []byte {
+	return append(CnsKey, append([]byte(name), []byte(addr)...)...)
 }

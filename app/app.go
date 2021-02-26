@@ -203,7 +203,7 @@ type App struct {
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 
-	cnsKeeper cnskeeper.Keeper
+	CNSkeeper cnskeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// the module manager
@@ -329,8 +329,8 @@ func New(
 	// If evidence needs to be handled for the app, set routes in router here and seal
 	app.EvidenceKeeper = *evidenceKeeper
 
-	app.cnsKeeper = *cnskeeper.NewKeeper(
-		appCodec, keys[cnstypes.StoreKey], keys[cnstypes.MemStoreKey],
+	app.CNSkeeper = *cnskeeper.NewKeeper(
+		appCodec, keys[cnstypes.StoreKey], keys[cnstypes.MemStoreKey], app.DistrKeeper,
 	)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
@@ -369,7 +369,7 @@ func New(
 		ibc.NewAppModule(app.IBCKeeper),
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
-		cns.NewAppModule(appCodec, app.cnsKeeper),
+		cns.NewAppModule(appCodec, app.CNSkeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
