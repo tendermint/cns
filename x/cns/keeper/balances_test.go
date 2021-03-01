@@ -43,11 +43,11 @@ func (suite *TestSuite) TestSendTokens() {
 	suite.Require().NoError(err) // relay committed
 
 	// register chains with diff client IDs
-	_, _, _, _ = suite.coordinator.SetupClientConnections(suite.chainA, suite.chainB, exported.Tendermint)
+	_, clientD, _, _ := suite.coordinator.SetupClientConnections(suite.chainA, suite.chainB, exported.Tendermint)
 	err = suite.chainA.App.CNSkeeper.Register(suite.chainA.GetContext(), cnstypes.ChainInfo{
 		ChainName:          suite.chainB.ChainID,
 		Owner:              suite.chainB.SenderAccount.GetAddress().String(),
-		CanonicalIbcClient: clientB,
+		CanonicalIbcClient: clientD,
 	})
 	suite.Require().NoError(err)
 

@@ -40,7 +40,6 @@ func (k Keeper) FetchUpdatedBalances(ctx sdk.Context, addr sdk.AccAddress) (sdk.
 			if !ok {
 				return nil, fmt.Errorf("unable to fetch client state")
 			}
-
 			var cs2 exported.ClientState
 			var matchedInfos []types.ChainInfo
 			k.IterateAllInfos(ctx, func(info types.ChainInfo) bool {
@@ -49,9 +48,9 @@ func (k Keeper) FetchUpdatedBalances(ctx sdk.Context, addr sdk.AccAddress) (sdk.
 					if !ok {
 						return false
 					}
-					cs0 := cs.(exported.ClientState)
-					cs1 := cs2.(exported.ClientState)
-					if cs0 == cs1 {
+					cs0 := cs.ZeroCustomFields()
+					cs1 := cs2.ZeroCustomFields()
+					if cs0.ClientType() == cs1.ClientType() {
 						matchedInfos = append(matchedInfos, info)
 						return false
 					}
@@ -73,13 +72,13 @@ func (k Keeper) FetchUpdatedBalances(ctx sdk.Context, addr sdk.AccAddress) (sdk.
 				return nil, fmt.Errorf("unable to fetch client consensus state")
 			}
 
-			if connCS != storeCS {
+			if connCS.String() != storeCS.String() {
 				return nil, fmt.Errorf("consensus state mismatch")
 			}
 			ibcDenom := "ibc/" + denomTrace.BaseDenom + "/" + matchedInfos[0].ChainName
 			newBalances = append(newBalances, sdk.NewCoin(ibcDenom, bal.Amount))
 		}
-
+		newBalances = append(newBalances, bal)
 	}
-	return nil, nil
+	return newBalances, nil
 }
