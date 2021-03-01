@@ -134,6 +134,7 @@ func (s *TestSuite) TestUpdate() {
 				err := k.Update(s.ctx, updatedInfo)
 				s.Require().NoError(err)
 				info, err := k.GetChainInfo(s.ctx, tc.cInfo.ChainName, tc.cInfo.Owner)
+				s.Require().NoError(err)
 				s.Require().Equal(updatedInfo, info)
 			} else {
 				info, err := k.GetChainInfo(s.ctx, tc.cInfo.ChainName, tc.cInfo.Owner)
