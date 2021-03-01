@@ -61,6 +61,7 @@ import (
 	porttypes "github.com/cosmos/cosmos-sdk/x/ibc/core/05-port/types"
 	ibchost "github.com/cosmos/cosmos-sdk/x/ibc/core/24-host"
 	ibckeeper "github.com/cosmos/cosmos-sdk/x/ibc/core/keeper"
+	ibcmock "github.com/cosmos/cosmos-sdk/x/ibc/testing/mock"
 	"github.com/cosmos/cosmos-sdk/x/mint"
 	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
@@ -202,6 +203,7 @@ type App struct {
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
+	ScopedIBCMockKeeper  capabilitykeeper.ScopedKeeper
 
 	CNSkeeper cnskeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
@@ -261,6 +263,7 @@ func New(
 	// grant capabilities for the ibc and ibc-transfer modules
 	scopedIBCKeeper := app.CapabilityKeeper.ScopeToModule(ibchost.ModuleName)
 	scopedTransferKeeper := app.CapabilityKeeper.ScopeToModule(ibctransfertypes.ModuleName)
+	scopedIBCMockKeeper := app.CapabilityKeeper.ScopeToModule(ibcmock.ModuleName)
 
 	// add keepers
 	app.AccountKeeper = authkeeper.NewAccountKeeper(
@@ -330,7 +333,8 @@ func New(
 	app.EvidenceKeeper = *evidenceKeeper
 
 	app.CNSkeeper = *cnskeeper.NewKeeper(
-		appCodec, keys[cnstypes.StoreKey], keys[cnstypes.MemStoreKey], app.DistrKeeper,
+		appCodec, keys[cnstypes.StoreKey], keys[cnstypes.MemStoreKey], app.BankKeeper, app.IBCKeeper.ClientKeeper,
+		app.IBCKeeper.ConnectionKeeper, app.IBCKeeper.ChannelKeeper, app.DistrKeeper, app.TransferKeeper,
 	)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
@@ -445,6 +449,8 @@ func New(
 
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedTransferKeeper = scopedTransferKeeper
+
+	app.ScopedIBCMockKeeper = scopedIBCMockKeeper
 
 	return app
 }

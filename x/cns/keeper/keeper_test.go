@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/tendermint/cns/app"
 	"github.com/tendermint/cns/x/cns/types"
+	ibctesting "github.com/tendermint/cns/x/ibc/testing"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	"testing"
 )
@@ -17,9 +18,15 @@ type TestSuite struct {
 	ctx         sdk.Context
 	queryClient types.QueryClient
 	cInfo       types.ChainInfo
+
+	coordinator *ibctesting.Coordinator
+
+	// testing chains used for convenience and readability
+	chainA *ibctesting.TestChain
+	chainB *ibctesting.TestChain
 }
 
-func (s *TestSuite) SetupTest() {
+func (suite *TestSuite) SetupTest() {
 	app := app.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 	queryHelper := baseapp.NewQueryServerTestHelper(ctx, app.InterfaceRegistry())
@@ -27,10 +34,10 @@ func (s *TestSuite) SetupTest() {
 	queryClient := types.NewQueryClient(queryHelper)
 	addr := "cosmos1wrx0x9m9ykdhw9sg04v7uljme53wuj03cfqce6"
 	ownerAddr, err := sdk.AccAddressFromBech32(addr)
-	s.Require().NoError(err)
-	s.Require().NoError(app.BankKeeper.SetBalances(ctx, ownerAddr,
+	suite.Require().NoError(err)
+	suite.Require().NoError(app.BankKeeper.SetBalances(ctx, ownerAddr,
 		sdk.NewCoins(sdk.NewInt64Coin("stake", 100000000))))
-	s.cInfo = types.ChainInfo{
+	suite.cInfo = types.ChainInfo{
 		ChainName:          "test",
 		Expiration:         0,
 		Owner:              addr,
@@ -44,12 +51,16 @@ func (s *TestSuite) SetupTest() {
 		},
 	}
 	// register test info
-	err = app.CNSkeeper.Register(ctx, s.cInfo)
-	s.Require().NoError(err)
-	s.ctx, s.app, s.queryClient = ctx, app, queryClient
+	err = app.CNSkeeper.Register(ctx, suite.cInfo)
+	suite.Require().NoError(err)
+
+	suite.coordinator = ibctesting.NewCoordinator(suite.T(), 3)
+	suite.chainA = suite.coordinator.GetChain(ibctesting.GetChainID(0))
+	suite.chainB = suite.coordinator.GetChain(ibctesting.GetChainID(1))
+	suite.ctx, suite.app, suite.queryClient = ctx, app, queryClient
 }
-func (s *TestSuite) TestKeeper() {
-	k := s.app.CNSkeeper
+func (suite *TestSuite) TestKeeper() {
+	k := suite.app.CNSkeeper
 	addr := "cosmos1wrx0x9m9ykdhw9sg04v7uljme53wuj03cfqce6"
 	testCases := []struct {
 		msg      string
@@ -74,28 +85,28 @@ func (s *TestSuite) TestKeeper() {
 		},
 	}
 	for _, tc := range testCases {
-		s.Run(fmt.Sprintf("Case %s", tc.msg), func() {
+		suite.Run(fmt.Sprintf("Case %s", tc.msg), func() {
 			if tc.expPass {
-				info, err := k.GetChainInfo(s.ctx, tc.cInfo.ChainName, tc.cInfo.Owner)
-				s.Require().NoError(err)
-				s.Require().Equal(s.cInfo, info)
+				info, err := k.GetChainInfo(suite.ctx, tc.cInfo.ChainName, tc.cInfo.Owner)
+				suite.Require().NoError(err)
+				suite.Require().Equal(suite.cInfo, info)
 			} else {
-				info, err := k.GetChainInfo(s.ctx, tc.cInfo.ChainName, tc.cInfo.Owner)
-				s.Require().Error(err)
-				s.Require().Empty(info)
+				info, err := k.GetChainInfo(suite.ctx, tc.cInfo.ChainName, tc.cInfo.Owner)
+				suite.Require().Error(err)
+				suite.Require().Empty(info)
 			}
 		})
 	}
 	// test IterateAllInfos
 	var infos []types.ChainInfo
-	k.IterateAllInfos(s.ctx, func(info types.ChainInfo) bool {
+	k.IterateAllInfos(suite.ctx, func(info types.ChainInfo) bool {
 		infos = append(infos, info)
 		return false
 	})
-	s.Require().Equal(1, len(infos))
+	suite.Require().Equal(1, len(infos))
 }
-func (s *TestSuite) TestUpdate() {
-	k := s.app.CNSkeeper
+func (suite *TestSuite) TestUpdate() {
+	k := suite.app.CNSkeeper
 	addr := "cosmos1wrx0x9m9ykdhw9sg04v7uljme53wuj03cfqce6"
 	updatedInfo := types.ChainInfo{
 		ChainName:          "test",
@@ -129,16 +140,16 @@ func (s *TestSuite) TestUpdate() {
 	}
 
 	for _, tc := range testCases {
-		s.Run(fmt.Sprintf("Case %s", tc.msg), func() {
+		suite.Run(fmt.Sprintf("Case %s", tc.msg), func() {
 			if tc.expPass {
-				err := k.Update(s.ctx, updatedInfo)
-				s.Require().NoError(err)
-				info, err := k.GetChainInfo(s.ctx, tc.cInfo.ChainName, tc.cInfo.Owner)
-				s.Require().Equal(updatedInfo, info)
+				err := k.Update(suite.ctx, updatedInfo)
+				suite.Require().NoError(err)
+				info, err := k.GetChainInfo(suite.ctx, tc.cInfo.ChainName, tc.cInfo.Owner)
+				suite.Require().Equal(updatedInfo, info)
 			} else {
-				info, err := k.GetChainInfo(s.ctx, tc.cInfo.ChainName, tc.cInfo.Owner)
-				s.Require().Error(err)
-				s.Require().Empty(info)
+				info, err := k.GetChainInfo(suite.ctx, tc.cInfo.ChainName, tc.cInfo.Owner)
+				suite.Require().Error(err)
+				suite.Require().Empty(info)
 			}
 		})
 	}
