@@ -18,7 +18,7 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 var _ types.MsgServer = msgServer{}
 
-func (k msgServer) RegisterChainName(goCtx context.Context, msg *types.MsgRegisterChainNameRequest) (*types.MsgRegisterChainNameResponse, error) {
+func (k msgServer) RegisterChainName(goCtx context.Context, msg *types.MsgRegisterChainName) (*types.MsgRegisterChainNameResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	_, err := sdk.AccAddressFromBech32(msg.Owner)
@@ -45,7 +45,7 @@ func (k msgServer) RegisterChainName(goCtx context.Context, msg *types.MsgRegist
 	return &types.MsgRegisterChainNameResponse{}, err
 }
 
-func (k msgServer) UpdateChainInfo(goCtx context.Context, msg *types.MsgUpdateChainInfoRequest) (*types.MsgUpdateChainInfoResponse, error) {
+func (k msgServer) UpdateChainInfo(goCtx context.Context, msg *types.MsgUpdateChainInfo) (*types.MsgUpdateChainInfoResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	_, err := sdk.AccAddressFromBech32(msg.Owner)

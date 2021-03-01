@@ -38,6 +38,10 @@ func (k Keeper) Register(ctx sdk.Context, cInfo types.ChainInfo) error {
 		return err
 	}
 
+	info := k.GetChainInfoFromName(ctx, cInfo.ChainName)
+	if !info.Equal(types.ChainInfo{}) {
+		return types.ErrChainAlreadyExists
+	}
 	ownerAddr, err := sdk.AccAddressFromBech32(cInfo.Owner)
 	if err != nil {
 		return err

@@ -8,5 +8,5 @@ import (
 
 // x/cns module sentinel errors
 var (
-	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrChainAlreadyExists = sdkerrors.Register(ModuleName, 2, "chain name is already registered")
 )
