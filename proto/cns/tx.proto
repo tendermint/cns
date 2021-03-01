@@ -7,12 +7,12 @@ import "cns/cns.proto";
 option go_package = "github.com/tendermint/cns/x/cns/types";
 
 service Msg {
-  rpc RegisterChainName(MsgRegisterChainNameRequest) returns (MsgRegisterChainNameResponse);
+  rpc RegisterChainName(MsgRegisterChainName) returns (MsgRegisterChainNameResponse);
 
-  rpc UpdateChainInfo(MsgUpdateChainInfoRequest) returns (MsgUpdateChainInfoResponse);
+  rpc UpdateChainInfo(MsgUpdateChainInfo) returns (MsgUpdateChainInfoResponse);
 }
 
-message MsgRegisterChainNameRequest{
+message MsgRegisterChainName{
   string chain_name = 1;
   string owner      = 2;
   repeated string seed = 3;
@@ -23,7 +23,7 @@ message MsgRegisterChainNameRequest{
 
 message MsgRegisterChainNameResponse{ }
 
-message MsgUpdateChainInfoRequest{
+message MsgUpdateChainInfo{
   string chain_name = 1;
   string owner      = 2;
   repeated string seed = 3;

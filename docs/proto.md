@@ -14,9 +14,9 @@
     - [Query](#tendermint.cns.cns.Query)
   
 - [cns/tx.proto](#cns/tx.proto)
-    - [MsgRegisterChainNameRequest](#tendermint.cns.cns.MsgRegisterChainNameRequest)
+    - [MsgRegisterChainName](#tendermint.cns.cns.MsgRegisterChainName)
     - [MsgRegisterChainNameResponse](#tendermint.cns.cns.MsgRegisterChainNameResponse)
-    - [MsgUpdateChainInfoRequest](#tendermint.cns.cns.MsgUpdateChainInfoRequest)
+    - [MsgUpdateChainInfo](#tendermint.cns.cns.MsgUpdateChainInfo)
     - [MsgUpdateChainInfoResponse](#tendermint.cns.cns.MsgUpdateChainInfoResponse)
   
     - [Msg](#tendermint.cns.cns.Msg)
@@ -146,9 +146,9 @@ Query defines the gRPC querier service.
 
 
 
-<a name="tendermint.cns.cns.MsgRegisterChainNameRequest"></a>
+<a name="tendermint.cns.cns.MsgRegisterChainName"></a>
 
-### MsgRegisterChainNameRequest
+### MsgRegisterChainName
 
 
 
@@ -176,9 +176,9 @@ Query defines the gRPC querier service.
 
 
 
-<a name="tendermint.cns.cns.MsgUpdateChainInfoRequest"></a>
+<a name="tendermint.cns.cns.MsgUpdateChainInfo"></a>
 
-### MsgUpdateChainInfoRequest
+### MsgUpdateChainInfo
 
 
 
@@ -219,8 +219,8 @@ Query defines the gRPC querier service.
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| RegisterChainName | [MsgRegisterChainNameRequest](#tendermint.cns.cns.MsgRegisterChainNameRequest) | [MsgRegisterChainNameResponse](#tendermint.cns.cns.MsgRegisterChainNameResponse) |  |
-| UpdateChainInfo | [MsgUpdateChainInfoRequest](#tendermint.cns.cns.MsgUpdateChainInfoRequest) | [MsgUpdateChainInfoResponse](#tendermint.cns.cns.MsgUpdateChainInfoResponse) |  |
+| RegisterChainName | [MsgRegisterChainName](#tendermint.cns.cns.MsgRegisterChainName) | [MsgRegisterChainNameResponse](#tendermint.cns.cns.MsgRegisterChainNameResponse) |  |
+| UpdateChainInfo | [MsgUpdateChainInfo](#tendermint.cns.cns.MsgUpdateChainInfo) | [MsgUpdateChainInfoResponse](#tendermint.cns.cns.MsgUpdateChainInfoResponse) |  |
 
  
 
