@@ -8,6 +8,8 @@
     - [VersionInfo](#tendermint.cns.cns.VersionInfo)
   
 - [cns/query.proto](#cns/query.proto)
+    - [QueryBalancesRequest](#tendermint.cns.cns.QueryBalancesRequest)
+    - [QueryBalancesResponse](#tendermint.cns.cns.QueryBalancesResponse)
     - [QueryChainInfoRequest](#tendermint.cns.cns.QueryChainInfoRequest)
     - [QueryChainInfoResponse](#tendermint.cns.cns.QueryChainInfoResponse)
   
@@ -90,6 +92,36 @@ TODO(sahith): Add json and yaml flags
 
 
 
+<a name="tendermint.cns.cns.QueryBalancesRequest"></a>
+
+### QueryBalancesRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| addr | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="tendermint.cns.cns.QueryBalancesResponse"></a>
+
+### QueryBalancesResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| balances | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated |  |
+
+
+
+
+
+
 <a name="tendermint.cns.cns.QueryChainInfoRequest"></a>
 
 ### QueryChainInfoRequest
@@ -134,6 +166,7 @@ Query defines the gRPC querier service.
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | QueryChainInfo | [QueryChainInfoRequest](#tendermint.cns.cns.QueryChainInfoRequest) | [QueryChainInfoResponse](#tendermint.cns.cns.QueryChainInfoResponse) |  |
+| QueryBalances | [QueryBalancesRequest](#tendermint.cns.cns.QueryBalancesRequest) | [QueryBalancesResponse](#tendermint.cns.cns.QueryBalancesResponse) |  |
 
  
 

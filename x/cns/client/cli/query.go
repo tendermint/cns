@@ -29,6 +29,7 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 	}
 
 	cmd.AddCommand(GetCmdQueryChainInfo())
+	cmd.AddCommand(GetCmdQueryBalances())
 
 	return cmd
 }
@@ -62,6 +63,43 @@ $ %s query cns chain-info <chain-name>
 			}
 
 			return clientCtx.PrintProto(&res.Info)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// GetCmdQueryChainInfo implements the chaininfo query command.
+func GetCmdQueryBalances() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "balances [addr]",
+		Short: "Query chain info",
+		Long: strings.TrimSpace(
+			fmt.Sprintf(`Query information of a chain name.
+
+Example:
+$ %s query cns balances <addr>
+`,
+				version.AppName,
+			),
+		),
+		Args: cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			params := &types.QueryBalancesRequest{Addr: args[0]}
+			res, err := queryClient.QueryBalances(cmd.Context(), params)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
 		},
 	}
 
