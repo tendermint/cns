@@ -10,17 +10,6 @@ import (
 	ibctesting "github.com/tendermint/cns/x/ibc/testing"
 )
 
-func (suite *TestSuite) TestFetchBalances() {
-	//addr := "cosmos1wrx0x9m9ykdhw9sg04v7uljme53wuj03cfqce6"
-	//ownerAddr, err := sdk.AccAddressFromBech32(addr)
-	//suite.Require().NoError(err)
-	//suite.Require().NoError(suite.app.BankKeeper.SetBalances(suite.ctx, ownerAddr,
-	//	sdk.NewCoins(sdk.NewInt64Coin("stake", 100000000), sdk.NewInt64Coin("ibc/F48A74D4F2A8B3D0CA0572F682A334C4F9595827BFE030BFE112863A2BC928C0", 100))))
-	//coins, err := suite.app.CNSkeeper.FetchUpdatedBalances(suite.ctx, addr)
-	//suite.Require().NoError(err)
-	//suite.T().Log(coins)
-}
-
 func (suite *TestSuite) TestSendTokens() {
 	var (
 		channelA, channelB ibctesting.TestChannel
@@ -28,7 +17,7 @@ func (suite *TestSuite) TestSendTokens() {
 
 	clientA, clientB, connA, connB := suite.coordinator.SetupClientConnections(suite.chainA, suite.chainB, exported.Tendermint)
 	channelA, channelB = suite.coordinator.CreateTransferChannels(suite.chainA, suite.chainB, connA, connB, channeltypes.UNORDERED)
-	_ = suite.chainB.SenderAccount.GetAddress().String() // must be explicitly changed in malleate
+	_ = suite.chainB.SenderAccount.GetAddress().String()
 
 	coinFromBToA := sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(100))
 	transferMsg := types.NewMsgTransfer(channelB.PortID, channelB.ID, coinFromBToA, suite.chainB.SenderAccount.GetAddress(), suite.chainA.SenderAccount.GetAddress().String(), clienttypes.NewHeight(0, 110), 0)
@@ -51,15 +40,7 @@ func (suite *TestSuite) TestSendTokens() {
 	})
 	suite.Require().NoError(err)
 
-	//err = suite.chainB.App.CNSkeeper.Register(suite.chainB.GetContext(), cnstypes.ChainInfo{
-	//	ChainName: suite.chainA.ChainID,
-	//	Owner: suite.chainA.SenderAccount.GetAddress().String(),
-	//	CanonicalIbcClient: clientC,
-	//})
-	suite.Require().NoError(err)
-
 	suite.T().Log(suite.chainA.App.BankKeeper.GetAllBalances(suite.chainA.GetContext(), suite.chainA.SenderAccount.GetAddress()))
-
 	coins, err := suite.chainA.App.CNSkeeper.FetchUpdatedBalances(suite.chainA.GetContext(), suite.chainA.SenderAccount.GetAddress())
 	suite.Require().NoError(err)
 	suite.T().Log(coins)
