@@ -29,9 +29,12 @@ type ClientKeeper interface {
 	GetClientState(ctx sdk.Context, clientID string) (exported.ClientState, bool)
 	GetClientConsensusState(ctx sdk.Context, clientID string, height exported.Height) (exported.ConsensusState, bool)
 	GetLatestClientConsensusState(ctx sdk.Context, clientID string) (exported.ConsensusState, bool)
+	ClientStore(ctx sdk.Context, clientID string) sdk.KVStore
+	UpdateClient(ctx sdk.Context, clientID string, header exported.Header) error
 }
 
 // ConnectionKeeper defines the expected IBC connection keeper
 type ConnectionKeeper interface {
 	GetConnection(ctx sdk.Context, connectionID string) (connection connectiontypes.ConnectionEnd, found bool)
+	GetCommitmentPrefix() exported.Prefix
 }

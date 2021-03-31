@@ -24,6 +24,7 @@ type TestSuite struct {
 	// testing chains used for convenience and readability
 	chainA *ibctesting.TestChain
 	chainB *ibctesting.TestChain
+	chainC *ibctesting.TestChain
 }
 
 func (suite *TestSuite) SetupTest() {
@@ -57,6 +58,7 @@ func (suite *TestSuite) SetupTest() {
 	suite.coordinator = ibctesting.NewCoordinator(suite.T(), 3)
 	suite.chainA = suite.coordinator.GetChain(ibctesting.GetChainID(0))
 	suite.chainB = suite.coordinator.GetChain(ibctesting.GetChainID(1))
+	suite.chainC = suite.coordinator.GetChain(ibctesting.GetChainID(2))
 	suite.ctx, suite.app, suite.queryClient = ctx, app, queryClient
 }
 func (suite *TestSuite) TestKeeper() {
