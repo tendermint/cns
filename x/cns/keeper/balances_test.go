@@ -41,6 +41,7 @@ func (suite *TestSuite) TestSendTokens() {
 		CanonicalIbcClient: clientAC,
 	})
 	suite.Require().NoError(err)
+
 	err = suite.chainC.App.CNSkeeper.Register(suite.chainC.GetContext(), cnstypes.ChainInfo{
 		ChainName:          suite.chainB.ChainID,
 		Owner:              suite.chainB.SenderAccount.GetAddress().String(),
@@ -48,37 +49,38 @@ func (suite *TestSuite) TestSendTokens() {
 	})
 	suite.Require().NoError(err)
 
-	//suite.T().Log(suite.chainA.GetContext().BlockHeight())
-	//header2, err := suite.chainA.ConstructUpdateTMClientHeader(suite.chainC, clientAC)
-	//suite.Require().NoError(err)
-
-	ctx := sdk.WrapSDKContext(suite.chainB.GetContext())
-	queryRes, err := suite.chainB.App.IBCKeeper.ClientKeeper.ClientState(ctx, &clienttypes.QueryClientStateRequest{ClientId: clientAB})
-	suite.Require().NoError(err)
+	// create header from chainA and update clientAB on chain B
 	header1, err := suite.chainB.ConstructUpdateTMClientHeader(suite.chainA, clientAB)
 	suite.Require().NoError(err)
 	suite.chainB.App.IBCKeeper.ClientKeeper.UpdateClient(suite.chainB.GetContext(), clientAB, header1)
 	suite.chainB.NextBlock()
-	_, proofBz := suite.chainB.QueryClientStateProof(clientAB)
-	suite.T().Log(string(proofBz))
+
+	clientstate, proofBz := suite.chainB.QueryClientStateProof(clientAB)
+	suite.T().Log(clientstate)
 	suite.Require().NoError(err)
 
-	queryRes, err = suite.chainB.App.IBCKeeper.ClientKeeper.ClientState(ctx, &clienttypes.QueryClientStateRequest{ClientId: clientAB})
-	suite.Require().NoError(err)
-	newCS, err := clienttypes.UnpackClientState(queryRes.ClientState)
-	suite.Require().NoError(err)
-
-	ctx = sdk.WrapSDKContext(suite.chainC.GetContext())
-	queryRes2, err := suite.chainC.App.IBCKeeper.ClientKeeper.ClientState(ctx, &clienttypes.QueryClientStateRequest{ClientId: clientAC})
-	suite.Require().NoError(err)
-	suite.T().Log(queryRes2)
-	suite.T().Log(queryRes)
-
+	// TODO: DEBUG - without this header update, the consensus state doesn't exist.
 	header, err := suite.chainC.ConstructUpdateTMClientHeader(suite.chainA, clientAC)
 	suite.Require().NoError(err)
 	suite.T().Log(header)
 
+	err = suite.chainC.App.IBCKeeper.ClientKeeper.UpdateClient(suite.chainC.GetContext(), clientAC, header1)
+	suite.Require().NoError(err)
+
+	clientstate1, _ := suite.chainB.QueryClientStateProof(clientAC)
+
+	// fetch consensus state - is same on both clients
+	cons1, _ := suite.chainB.App.IBCKeeper.ClientKeeper.GetClientConsensusState(suite.chainB.GetContext(), clientAB, header1.GetHeight())
+	cons2, _ := suite.chainC.App.IBCKeeper.ClientKeeper.GetClientConsensusState(suite.chainC.GetContext(), clientAC, header1.GetHeight())
+	suite.T().Log(clientstate)
+	suite.T().Log(clientstate1)
+	suite.T().Log(cons1)
+	suite.T().Log(cons2)
+
+	suite.chainA.NextBlock()
+	suite.chainB.NextBlock()
 	suite.chainC.NextBlock()
-	err = suite.chainC.App.CNSkeeper.ProveClientState(suite.chainC.GetContext(), clientAC, header1.GetHeight(), newCS, proofBz, header1)
+	err = suite.chainC.App.CNSkeeper.ProveClientState(suite.chainC.GetContext(), clientAC, header1.GetHeight(), clientstate, proofBz, header1)
 	suite.T().Log(err)
+	suite.Require().NoError(err)
 }

@@ -10,10 +10,6 @@ func (k Keeper) ProveClientState(ctx sdk.Context, clientId string, proofHeight e
 	prefix := k.connKeeper.GetCommitmentPrefix()
 	prefixBz := commitmenttypes.NewMerklePrefix(prefix.Bytes())
 
-	err := k.clientKeeper.UpdateClient(ctx, clientId, header)
-	if err != nil {
-		return err
-	}
 	return clientState.VerifyClientState(k.clientKeeper.ClientStore(ctx, clientId), k.cdc, proofHeight,
 		&prefixBz, clientId, proof, clientState)
 
