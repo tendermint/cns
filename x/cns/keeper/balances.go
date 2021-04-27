@@ -30,7 +30,7 @@ func (k Keeper) FetchUpdatedBalances(ctx sdk.Context, addr sdk.AccAddress) (sdk.
 			identifiers := strings.Split(denomTrace.Path, "/")
 
 			conn, err := k.GetConnFromIdentifiers(ctx, identifiers)
-			cs1, ok := k.clientKeeper.GetClientState(ctx, conn.ClientId)
+			cs1, ok := k.ClientKeeper.GetClientState(ctx, conn.ClientId)
 			if !ok {
 				return nil, fmt.Errorf("unable to fetch client state")
 			}
@@ -38,7 +38,7 @@ func (k Keeper) FetchUpdatedBalances(ctx sdk.Context, addr sdk.AccAddress) (sdk.
 			var matchedInfos []types.ChainInfo
 			k.IterateAllInfos(ctx, func(info types.ChainInfo) bool {
 				if info.CanonicalIbcClient != "" {
-					cs2, ok = k.clientKeeper.GetClientState(ctx, info.CanonicalIbcClient)
+					cs2, ok = k.ClientKeeper.GetClientState(ctx, info.CanonicalIbcClient)
 					if !ok {
 						return false
 					}
@@ -56,12 +56,12 @@ func (k Keeper) FetchUpdatedBalances(ctx sdk.Context, addr sdk.AccAddress) (sdk.
 				return nil, fmt.Errorf("invalid client used for transfer")
 			}
 
-			connCS, ok := k.clientKeeper.GetLatestClientConsensusState(ctx, conn.ClientId)
+			connCS, ok := k.ClientKeeper.GetLatestClientConsensusState(ctx, conn.ClientId)
 			if !ok {
 				return nil, fmt.Errorf("unable to fetch client consensus state")
 			}
 
-			storeCS, ok := k.clientKeeper.GetLatestClientConsensusState(ctx, matchedInfos[0].CanonicalIbcClient)
+			storeCS, ok := k.ClientKeeper.GetLatestClientConsensusState(ctx, matchedInfos[0].CanonicalIbcClient)
 			if !ok {
 				return nil, fmt.Errorf("unable to fetch client consensus state")
 			}
@@ -90,7 +90,7 @@ func (k Keeper) GetConnFromIdentifiers(ctx sdk.Context, identifiers []string) (t
 		return types2.ConnectionEnd{}, fmt.Errorf("denom has multihop connections")
 	}
 
-	conn, ok := k.connKeeper.GetConnection(ctx, channel.ConnectionHops[0])
+	conn, ok := k.ConnKeeper.GetConnection(ctx, channel.ConnectionHops[0])
 	if !ok {
 		return types2.ConnectionEnd{}, fmt.Errorf("unable to fetch conn info")
 	}

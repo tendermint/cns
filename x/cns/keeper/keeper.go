@@ -10,13 +10,13 @@ import (
 
 type (
 	Keeper struct {
-		cdc      codec.Marshaler
+		Cdc      codec.Marshaler
 		storeKey sdk.StoreKey
 		memKey   sdk.StoreKey
 
 		bankKeeper    types.BankKeeper
-		clientKeeper  types.ClientKeeper
-		connKeeper    types.ConnectionKeeper
+		ClientKeeper  types.ClientKeeper
+		ConnKeeper    types.ConnectionKeeper
 		channelKeeper types.ChannelKeeper
 		distrKeeper   types.DistributionKeeper
 		ibctransfer   types.IbcTransferKeeper
@@ -27,12 +27,12 @@ func NewKeeper(cdc codec.Marshaler, storeKey, memKey sdk.StoreKey, bankKeeper ty
 	connKeeper types.ConnectionKeeper, channelKeeper types.ChannelKeeper,
 	distrKeeper types.DistributionKeeper, ibctTansferKeeper types.IbcTransferKeeper) *Keeper {
 	return &Keeper{
-		cdc:           cdc,
+		Cdc:           cdc,
 		storeKey:      storeKey,
 		memKey:        memKey,
 		bankKeeper:    bankKeeper,
-		clientKeeper:  clientKeeper,
-		connKeeper:    connKeeper,
+		ClientKeeper:  clientKeeper,
+		ConnKeeper:    connKeeper,
 		channelKeeper: channelKeeper,
 		distrKeeper:   distrKeeper,
 		ibctransfer:   ibctTansferKeeper,
@@ -96,7 +96,7 @@ func (k Keeper) GetChainInfo(ctx sdk.Context, cName, owner string) (types.ChainI
 	}
 
 	var cInfo types.ChainInfo
-	err := k.cdc.UnmarshalBinaryBare(bz, &cInfo)
+	err := k.Cdc.UnmarshalBinaryBare(bz, &cInfo)
 	if err != nil {
 		return types.ChainInfo{}, err
 	}
@@ -107,7 +107,7 @@ func (k Keeper) GetChainInfo(ctx sdk.Context, cName, owner string) (types.ChainI
 func (k Keeper) SetChainInfo(ctx sdk.Context, info types.ChainInfo) error {
 	store := ctx.KVStore(k.storeKey)
 
-	bytes, err := k.cdc.MarshalBinaryBare(&info)
+	bytes, err := k.Cdc.MarshalBinaryBare(&info)
 	if err != nil {
 		return err
 	}
@@ -124,7 +124,7 @@ func (k Keeper) GetChainInfoFromName(ctx sdk.Context, name string) types.ChainIn
 
 	var info types.ChainInfo
 	for ; iterator.Valid(); iterator.Next() {
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &info)
+		k.Cdc.MustUnmarshalBinaryBare(iterator.Value(), &info)
 	}
 
 	return info
@@ -138,7 +138,7 @@ func (k Keeper) IterateAllInfos(ctx sdk.Context, cb func(info types.ChainInfo) b
 
 	for ; iterator.Valid(); iterator.Next() {
 		var info types.ChainInfo
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &info)
+		k.Cdc.MustUnmarshalBinaryBare(iterator.Value(), &info)
 
 		if cb(info) {
 			break
